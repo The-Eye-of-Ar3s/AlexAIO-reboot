@@ -1,0 +1,20 @@
+{
+    "enabled": true,
+    "operator": true,
+    "price_multiplier": 1,
+    "max_level_trades": false,
+    "gameplay_changes": {
+        "enabled": false,
+        "better_sicc_case": true,
+        "holster_smg": true,
+        "thermal": true,
+        "no_head_segments": true,
+        "faster_ammo_load": false,
+        "ammo_stacks_multiplier": 4,
+        "all_items_examined": true
+    },
+    "gunsmith": {
+        "enabled": true,
+        "remove_conflicts": true
+    }
+}
