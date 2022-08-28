@@ -1,6 +1,6 @@
 {
     "name": "AlexAIO-Reboot",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "src/mod.js",
     "license": "Attribution-ShareAlike 4.0 International",
     "author": "TheEyeOfAres",
