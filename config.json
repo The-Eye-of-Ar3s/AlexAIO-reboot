@@ -4,7 +4,7 @@
     "price_multiplier": 1,
     "max_level_trades": false,
     "gameplay_changes": {
-        "enabled": false,
+        "enabled": true,
         "better_sicc_case": true,
         "holster_smg": true,
         "thermal": true,
