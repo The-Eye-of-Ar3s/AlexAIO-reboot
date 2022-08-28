@@ -105,16 +105,7 @@ class Mod implements IPreAkiLoadMod, IPostDBLoadMod
 
                 if (this.cfg.gameplay_changes.holster_smg)
                 {
-                    const inventory = items["55d7217a4bdc2d86028b456d"];
-                    const holster = inventory._props.Slots[2];
-                    holster._props.filters[0].Filter.push("5d2f0d8048f0356c925bc3b0");
-                    holster._props.filters[0].Filter.push("5ba26383d4351e00334c93d9");
-                    holster._props.filters[0].Filter.push("5bd70322209c4d00d7167b8f");
-                    holster._props.filters[0].Filter.push("5de7bd7bfd6b4e6e2276dc25");
-                    holster._props.filters[0].Filter.push("5e00903ae9dc277128008b87");
-                    holster._props.filters[0].Filter.push("57f4c844245977379d5c14d1");
-                    holster._props.filters[0].Filter.push("57f3c6bd24597738e730fa2f");
-                    holster._props.filters[0].Filter.push("57d14d2524597714373db789");
+                    items["55d7217a4bdc2d86028b456d"]._props.Slots[2]._props.filters[0].Filter.push("5447b5e04bdc2d62278b4567");
                 }
 
                 if (this.cfg.gameplay_changes.thermal)
