@@ -1,43 +1,53 @@
 import { IPmcData } from "../models/eft/common/IPmcData";
 import { InsuredItem } from "../models/eft/common/tables/IBotBase";
 import { Item, Repairable } from "../models/eft/common/tables/IItem";
+import { IStaticAmmoDetails } from "../models/eft/common/tables/ILootBase";
 import { ITemplateItem } from "../models/eft/common/tables/ITemplateItem";
 import { ILogger } from "../models/spt/utils/ILogger";
 import { DatabaseServer } from "../servers/DatabaseServer";
+import { ItemBaseClassService } from "../services/ItemBaseClassService";
+import { LocaleService } from "../services/LocaleService";
+import { LocalisationService } from "../services/LocalisationService";
 import { HashUtil } from "../utils/HashUtil";
 import { JsonUtil } from "../utils/JsonUtil";
+import { MathUtil } from "../utils/MathUtil";
+import { ObjectId } from "../utils/ObjectId";
+import { RandomUtil } from "../utils/RandomUtil";
+import { HandbookHelper } from "./HandbookHelper";
 declare class ItemHelper {
     protected logger: ILogger;
     protected hashUtil: HashUtil;
     protected jsonUtil: JsonUtil;
+    protected randomUtil: RandomUtil;
+    protected objectId: ObjectId;
+    protected mathUtil: MathUtil;
     protected databaseServer: DatabaseServer;
-    constructor(logger: ILogger, hashUtil: HashUtil, jsonUtil: JsonUtil, databaseServer: DatabaseServer);
+    protected handbookHelper: HandbookHelper;
+    protected itemBaseClassService: ItemBaseClassService;
+    protected localisationService: LocalisationService;
+    protected localeService: LocaleService;
+    constructor(logger: ILogger, hashUtil: HashUtil, jsonUtil: JsonUtil, randomUtil: RandomUtil, objectId: ObjectId, mathUtil: MathUtil, databaseServer: DatabaseServer, handbookHelper: HandbookHelper, itemBaseClassService: ItemBaseClassService, localisationService: LocalisationService, localeService: LocaleService);
     /**
-     * Checks if a id is a valid item. Valid meaning that it's an item that be stored in stash
+     * Checks if an id is a valid item. Valid meaning that it's an item that be stored in stash
      * @param       {string}    tpl       the template id / tpl
      * @returns                             boolean; true for items that may be in player posession and not quest items
      */
     isValidItem(tpl: string, invalidBaseTypes?: string[]): boolean;
     /**
-     * Checks if an id is a valid item. Valid meaning that it's an item that may be a reward
-     * or content of bot loot. Items that are tested as valid may be in a player backpack or stash.
-     * @param {*} tpl template id of item to check
-     * @returns boolean: true if item is valid reward
-     */
-    isValidRewardItem(tpl: string): boolean;
-    /**
-     * Picks rewardable items from items.json. This means they need to fit into the inventory and they shouldn't be keys (debatable)
-     * @returns     a list of rewardable items [[_tpl, itemTemplate],...]
-     */
-    getRewardableItems(): [string, ITemplateItem][];
-    /**
      * Check if the tpl / template Id provided is a descendent of the baseclass
      *
      * @param   {string}    tpl             the item template id to check
-     * @param   {string}    baseclassTpl    the baseclass to check for
+     * @param   {string}    baseClassTpl    the baseclass to check for
      * @return  {boolean}                   is the tpl a descendent?
      */
-    isOfBaseclass(tpl: string, baseclassTpl: string): boolean;
+    isOfBaseclass(tpl: string, baseClassTpl: string): boolean;
+    /**
+     * Check if item has any of the supplied base clases
+     * @param tpl Item to check base classes of
+     * @param baseClassTpls base classes to check for
+     * @returns true if any supplied base classes match
+     */
+    isOfBaseclasses(tpl: string, baseClassTpls: string[]): boolean;
     /**
      * Returns the item price based on the handbook or as a fallback from the prices.json if the item is not
      * found in the handbook. If the price can't be found at all return 0
@@ -84,6 +94,11 @@ declare class ItemHelper {
      * @returns {array}                     The array of StackSlotItems
      */
     generateItemsFromStackSlot(item: ITemplateItem, parentId: string): Item[];
+    /**
+     * Get cloned copy of all item data from items.json
+     * @returns array of ITemplateItem objects
+     */
+    getItems(): ITemplateItem[];
     /**
      * Gets item data from items.json
      * @param tpl items template id to look up
@@ -177,7 +192,7 @@ declare class ItemHelper {
      */
     replaceIDs(pmcData: IPmcData, items: Item[], insuredItems?: InsuredItem[], fastPanel?: any): any[];
     /**
-     * Recursivly loop down through an items hierarchy to see if any of the ids match the supplied list, return true if any do
+     * WARNING, SLOW. Recursivly loop down through an items hierarchy to see if any of the ids match the supplied list, return true if any do
      * @param {string} tpl
      * @param {Array} tplsToCheck
      * @returns boolean
@@ -196,6 +211,28 @@ declare class ItemHelper {
      * @returns ItemSize object (width and height)
      */
     getItemSize(items: Item[], rootItemId: string): ItemHelper.ItemSize;
+    /**
+     * Get a random cartridge from an items Filter property
+     * @param item
+     * @returns
+     */
+    getRandomCompatibleCaliberTemplateId(item: ITemplateItem): string;
+    createRandomMagCartridges(magTemplate: ITemplateItem, parentId: string, staticAmmoDist: Record<string, IStaticAmmoDetails[]>, caliber?: string): Item;
+    protected getRandomValidCaliber(magTemplate: ITemplateItem): string;
+    protected drawAmmoTpl(caliber: string, staticAmmoDist: Record<string, IStaticAmmoDetails[]>): string;
+    createCartidges(parentId: string, ammoTpl: string, stackCount: number): Item;
+    /**
+     * Get the size of a stack, return 1 if no stack object count property found
+     * @param item Item to get stack size of
+     * @returns size of stack
+     */
+    getItemStackSize(item: Item): number;
+    /**
+     * Get the name of an item from the locale file using the item tpl
+     * @param itemTpl Tpl of item to get name of
+     * @returns Name of item
+     */
+    getItemName(itemTpl: string): string;
 }
 declare namespace ItemHelper {
     interface ItemSize {

@@ -17,8 +17,16 @@ export declare class InsuranceCallbacks extends OnUpdate {
     protected configServer: ConfigServer;
     protected insuranceConfig: IInsuranceConfig;
     constructor(insuranceController: InsuranceController, insuranceService: InsuranceService, httpResponse: HttpResponseUtil, configServer: ConfigServer);
+    /**
+     * Handle client/insurance/items/list/cost
+     * @returns IGetInsuranceCostResponseData
+     */
     getInsuranceCost(url: string, info: IGetInsuranceCostRequestData, sessionID: string): IGetBodyResponseData<IGetInsuranceCostResponseData>;
+    /**
+     * Handle Insure
+     * @returns IItemEventRouterResponse
+     */
     insure(pmcData: IPmcData, body: IInsureRequestData, sessionID: string): IItemEventRouterResponse;
-    onUpdate(secondsSinceLastRun: number): boolean;
+    onUpdate(secondsSinceLastRun: number): Promise<boolean>;
     getRoute(): string;
 }

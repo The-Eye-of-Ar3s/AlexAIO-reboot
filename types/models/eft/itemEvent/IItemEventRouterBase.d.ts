@@ -7,11 +7,12 @@ export interface IItemEventRouterBase {
     warnings: Warning[];
     profileChanges: TProfileChanges | "";
 }
-export declare type TProfileChanges = Record<string, ProfileChange>;
+export type TProfileChanges = Record<string, ProfileChange>;
 export interface Warning {
     index: number;
-    err: string;
     errmsg: string;
+    code?: string;
+    data?: any;
 }
 export interface ProfileChange {
     _id: string;
@@ -21,6 +22,8 @@ export interface ProfileChange {
     builds: BuildChange[];
     items: ItemChanges;
     production: Record<string, Production>;
+    /** Hideout area improvement id */
+    improvements: Record<string, Improvement>;
     skills: Skills;
     traderRelations: Record<string, TraderRelations>;
     repeatableQuests?: IPmcDataRepeatableQuest[];
@@ -43,6 +46,10 @@ export interface Production {
     inProgress: boolean;
     RecipeId: string;
     Products: Product[];
+}
+export interface Improvement {
+    completed: boolean;
+    improveCompleteTimestamp: number;
 }
 export interface Product {
     _id: string;

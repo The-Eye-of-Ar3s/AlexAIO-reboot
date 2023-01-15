@@ -11,7 +11,6 @@ import { ConfigTypes } from "@spt-aki/models/enums/ConfigTypes";
 import { ITraderAssort, ITraderBase } from "@spt-aki/models/eft/common/tables/ITrader";
 import { ITraderConfig, UpdateTime } from "@spt-aki/models/spt/config/ITraderConfig";
 import { JsonUtil } from "@spt-aki/utils/JsonUtil";
-import { ILocaleGlobalBase } from "@spt-aki/models/spt/server/ILocaleBase";
 
 // The new trader config
 import * as baseJson from "../db/base.json";
@@ -76,8 +75,16 @@ class Mod implements IPreAkiLoadMod, IPostDBLoadMod
                 };
         
                 // For each language, add locale for the new trader
-                const locales = Object.values(tables.locales.global) as ILocaleGlobalBase[];
-                for (const locale of locales)
+                const locales = Object.values(tables.locales.global);
+                for (const locale of locales) {
+                    locale[`${baseJson._id} FullName`] = "***Redacted***";
+                    locale[`${baseJson._id} FirstName`] = "***Redacted***";
+                    locale[`${baseJson._id} Nickname`] = baseJson.nickname;
+                    locale[`${baseJson._id} Location`] = "***Redacted***";
+                    locale[`${baseJson._id} Description`] = "***Redacted***";
+                }
+
+                /*for (const locale of locales)
                 {
                     locale.trading[baseJson._id] = {
                         FullName: "***Redacted***",
@@ -86,7 +93,7 @@ class Mod implements IPreAkiLoadMod, IPostDBLoadMod
                         Location: "***Redacted***",
                         Description: "***Redacted***"
                     };
-                }
+                }*/
             }
 
             if (this.cfg.gameplay_changes.enabled)

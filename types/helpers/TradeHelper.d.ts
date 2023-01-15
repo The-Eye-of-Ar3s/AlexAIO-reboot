@@ -6,21 +6,25 @@ import { Item, Upd } from "../models/eft/common/tables/IItem";
 import { IItemEventRouterResponse } from "../models/eft/itemEvent/IItemEventRouterResponse";
 import { IProcessBuyTradeRequestData } from "../models/eft/trade/IProcessBuyTradeRequestData";
 import { IProcessSellTradeRequestData } from "../models/eft/trade/IProcessSellTradeRequestData";
+import { ITraderConfig } from "../models/spt/config/ITraderConfig";
 import { ILogger } from "../models/spt/utils/ILogger";
-import { ItemEventRouter } from "../routers/ItemEventRouter";
+import { EventOutputHolder } from "../routers/EventOutputHolder";
+import { ConfigServer } from "../servers/ConfigServer";
 import { RagfairServer } from "../servers/RagfairServer";
 import { FenceService } from "../services/FenceService";
 import { PaymentService } from "../services/PaymentService";
 export declare class TradeHelper {
     protected logger: ILogger;
-    protected itemEventRouter: ItemEventRouter;
+    protected eventOutputHolder: EventOutputHolder;
     protected traderHelper: TraderHelper;
     protected itemHelper: ItemHelper;
     protected paymentService: PaymentService;
     protected fenceService: FenceService;
     protected inventoryHelper: InventoryHelper;
     protected ragfairServer: RagfairServer;
-    constructor(logger: ILogger, itemEventRouter: ItemEventRouter, traderHelper: TraderHelper, itemHelper: ItemHelper, paymentService: PaymentService, fenceService: FenceService, inventoryHelper: InventoryHelper, ragfairServer: RagfairServer);
+    protected configServer: ConfigServer;
+    protected traderConfig: ITraderConfig;
+    constructor(logger: ILogger, eventOutputHolder: EventOutputHolder, traderHelper: TraderHelper, itemHelper: ItemHelper, paymentService: PaymentService, fenceService: FenceService, inventoryHelper: InventoryHelper, ragfairServer: RagfairServer, configServer: ConfigServer);
     /**
      * Buy item from flea or trader
      * @param pmcData
@@ -33,12 +37,18 @@ export declare class TradeHelper {
     buyItem(pmcData: IPmcData, buyRequestData: IProcessBuyTradeRequestData, sessionID: string, foundInRaid: boolean, upd: Upd): IItemEventRouterResponse;
     /**
      * Sell item to trader
-     * @param pmcData
-     * @param body
-     * @param sessionID
-     * @returns
+     * @param pmcData Profile to update
+     * @param sellRequest request data
+     * @param sessionID Session id
+     * @returns IItemEventRouterResponse
      */
-    sellItem(pmcData: IPmcData, body: IProcessSellTradeRequestData, sessionID: string): IItemEventRouterResponse;
+    sellItem(pmcData: IPmcData, sellRequest: IProcessSellTradeRequestData, sessionID: string): IItemEventRouterResponse;
+    /**
+     * Increment the assorts buy count by number of items purchased
+     * Show error on screen if player attepts to buy more than what the buy max allows
+     * @param assortBeingPurchased assort being bought
+     * @param itemsPurchasedCount number of items being bought
+     */
     protected incrementAssortBuyCount(assortBeingPurchased: Item, itemsPurchasedCount: number): void;
     protected checkPurchaseIsWithinTraderItemLimit(assortBeingPurchased: Item, assortId: string, count: number): void;
 }

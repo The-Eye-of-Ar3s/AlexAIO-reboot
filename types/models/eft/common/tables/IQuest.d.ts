@@ -1,4 +1,5 @@
 import { QuestRewardType } from "../../../enums/QuestRewardType";
+import { QuestStatus } from "../../../enums/QuestStatus";
 import { Item } from "./IItem";
 export interface IQuest {
     QuestName: string;
@@ -14,6 +15,7 @@ export interface IQuest {
     image: string;
     type: string;
     isKey: boolean;
+    questStatus: any;
     restartable: boolean;
     instantComplete: boolean;
     secretQuest: boolean;
@@ -36,18 +38,19 @@ export interface Conditions {
 export interface AvailableForConditions {
     _parent: string;
     _props: AvailableForProps;
-    dynamicLocale: boolean;
+    dynamicLocale?: boolean;
 }
 export interface AvailableForProps {
     id: string;
     index: number;
     parentId: string;
+    isEncoded: boolean;
     dynamicLocale: boolean;
     value?: number;
     compareMethod?: string;
     visibilityConditions?: VisibilityCondition[];
     target?: string | string[];
-    status?: number[];
+    status?: QuestStatus[];
     onlyFoundInRaid?: boolean;
     oneSessionOnly?: boolean;
     doNotResetIfCounterCompleted?: boolean;
@@ -99,7 +102,7 @@ export interface Rewards {
     FailRestartable: Reward[];
     Expired: Reward[];
 }
-export interface Reward {
+export interface Reward extends Item {
     value?: string | number;
     id: string;
     type: QuestRewardType;

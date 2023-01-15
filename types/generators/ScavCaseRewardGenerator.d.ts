@@ -8,9 +8,13 @@ import { RewardCountAndPriceDetails, ScavCaseRewardCountsAndPrices } from "../mo
 import { ILogger } from "../models/spt/utils/ILogger";
 import { ConfigServer } from "../servers/ConfigServer";
 import { DatabaseServer } from "../servers/DatabaseServer";
+import { ItemFilterService } from "../services/ItemFilterService";
 import { RagfairPriceService } from "../services/RagfairPriceService";
 import { HashUtil } from "../utils/HashUtil";
 import { RandomUtil } from "../utils/RandomUtil";
+/**
+ * Handle the creation of randomised scav case rewards
+ */
 export declare class ScavCaseRewardGenerator {
     protected logger: ILogger;
     protected randomUtil: RandomUtil;
@@ -18,9 +22,10 @@ export declare class ScavCaseRewardGenerator {
     protected itemHelper: ItemHelper;
     protected databaseServer: DatabaseServer;
     protected ragfairPriceService: RagfairPriceService;
+    protected itemFilterService: ItemFilterService;
     protected configServer: ConfigServer;
     protected scavCaseConfig: IScavCaseConfig;
-    constructor(logger: ILogger, randomUtil: RandomUtil, hashUtil: HashUtil, itemHelper: ItemHelper, databaseServer: DatabaseServer, ragfairPriceService: RagfairPriceService, configServer: ConfigServer);
+    constructor(logger: ILogger, randomUtil: RandomUtil, hashUtil: HashUtil, itemHelper: ItemHelper, databaseServer: DatabaseServer, ragfairPriceService: RagfairPriceService, itemFilterService: ItemFilterService, configServer: ConfigServer);
     /**
      * Create an array of rewards that will be given to the player upon completing their scav case build
      * @param body client request
@@ -32,12 +37,6 @@ export declare class ScavCaseRewardGenerator {
      * @returns filtered array of db items
      */
     protected getDbItems(): ITemplateItem[];
-    /**
-     * Check if a template id has a blacklisted parent id
-     * @param tplid template id to check
-     * @returns true if item is blacklisted
-     */
-    protected itemHasBlacklistedParent(tplid: string): boolean;
     /**
      * Pick a number of items to be rewards, the count is defined by the values in
      * @param items item pool to pick rewards from

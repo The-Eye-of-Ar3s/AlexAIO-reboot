@@ -1,9 +1,9 @@
 import { OnLoad } from "../di/OnLoad";
-import { IHttpServer } from "../models/spt/server/IHttpServer";
+import { HttpServer } from "../servers/HttpServer";
 export declare class HttpCallbacks extends OnLoad {
-    protected httpServer: IHttpServer;
-    constructor(httpServer: IHttpServer);
-    onLoad(): void;
+    protected httpServer: HttpServer;
+    constructor(httpServer: HttpServer);
+    onLoad(): Promise<void>;
     getRoute(): string;
     getImage(): string;
 }
